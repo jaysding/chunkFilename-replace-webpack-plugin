@@ -1,6 +1,6 @@
 const _webpack = require('webpack');
 
-const PluginName = 'filename-replace-webpack-plugin';
+const PluginName = 'chunk-filename-replace-webpack-plugin';
 const fileTypeMaps = {
     js: {
         pluginName: 'JsonpMainTemplatePlugin',
@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const {
     Template
   } = _webpack2.default;
-class FilenameReplaceWebpackPlugin {
+class ChunkFilenameReplaceWebpackPlugin {
     constructor(options) {
         /**
          * interface Type {
@@ -179,7 +179,6 @@ class FilenameReplaceWebpackPlugin {
         })
         Object.keys(chunkMaps.name).forEach(i => { // 保留不需要修改的chunk路径
             if(!Object.hasOwnProperty.call(linkHrefPathMaps, i)) {
-                // compiler.options.plugins.MiniCssExtractPlugin.chunkFilename
                 linkHrefPathMaps[i] = this.getHrefSrcPath(compiler, mainTemplate, chunk, hash, fileTypeMaps[fileType].moduleType);
             }
         })
@@ -191,4 +190,4 @@ class FilenameReplaceWebpackPlugin {
     }
 }
 
-module.exports = FilenameReplaceWebpackPlugin;
+module.exports = ChunkFilenameReplaceWebpackPlugin;

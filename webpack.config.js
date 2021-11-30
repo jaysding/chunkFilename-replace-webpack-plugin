@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const FilenameReplaceWebpackPlugin = require('./plugins/chunkFilename-replace-webpack-plugin.js');
+const ChunkFilenameReplaceWebpackPlugin = require('./plugins/chunk-filename-replace-webpack-plugin.js');
 
 module.exports = {
     mode: 'development',
@@ -43,7 +43,7 @@ module.exports = {
 			filename: 'css/[name].css',
 			chunkFilename: 'css/[name].chunk.@@@@.[contenthash:4].css'
 		}),
-        new FilenameReplaceWebpackPlugin([
+        new ChunkFilenameReplaceWebpackPlugin([
             {
                 from: {
                     js: 'zhengxiStyle',

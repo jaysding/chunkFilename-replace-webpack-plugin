@@ -1,4 +1,4 @@
-# chunkFilename-replace-webpack-plugin
+# chunk-filename-replace-webpack-plugin
 
 
 
@@ -20,7 +20,7 @@ ChunkFilename for Webpack4, and dynamically imported chunk names (paths), rename
 You need to install `chunkFilename-replace-webpack-plugin`:
 
 ```
-npm install --save-dev chunkFilename-replace-webpack-plugin
+npm install chunk-filename-replace-webpack-plugin --save-dev
 ```
 
 
@@ -28,7 +28,7 @@ npm install --save-dev chunkFilename-replace-webpack-plugin
 **webpack.config.js**
 
 ```javascript
-const ChunkFilenameReplaceWebpackPlugin = require('chunkFilename-replace-webpack-plugin');
+const ChunkFilenameReplaceWebpackPlugin = require('chunk-filename-replace-webpack-plugin');
 module.exports = {
 	// ...
 	plugins: [

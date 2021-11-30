@@ -42,7 +42,18 @@ class ChunkFilenameReplaceWebpackPlugin {
                 (source, chunk, hash) => {
                     if(source && source.length > 0 && source.indexOf('jsonpScriptSrc') !== -1) {
                         let _hrefMaps = this.getLinkHrefPathMaps(compiler, compilation, chunk, hash, 'js');
-                        let jsChunkTemplate = Template.asString([`return ${compilation.mainTemplate.requireFn}.p + eval(eval((${JSON.stringify(_hrefMaps)}))[chunkId]); //${PluginName} insert!\n`])
+                        let originTemplateString = this.getHrefSrcPath(compiler, compilation.mainTemplate, chunk, hash, 'javascript'); // 不需要修改的chunk路径统一放在一个变量里
+                        let jsChunkTemplate = Template.asString([
+                            Template.indent([
+                                'var originTemplate = function (chunkId) {  ',
+                                    Template.indent([
+                                        `return ${originTemplateString}`
+                                    ]),
+                                '};',
+                                `return ${compilation.mainTemplate.requireFn}.p + eval((${JSON.stringify(_hrefMaps)})[chunkId]); //${PluginName} insert!`
+                            ]),
+                            ''
+                        ])
                         let insertPos = 'function jsonpScriptSrc(chunkId)';
                         source = insertStr(source, source.indexOf(insertPos) + insertPos.length + 3, jsChunkTemplate);
                         return source
@@ -51,7 +62,22 @@ class ChunkFilenameReplaceWebpackPlugin {
             );
             compilation.mainTemplate.hooks.requireEnsure.tap(PluginName, (source, chunk, hash) => {
                 let _hrefMaps = this.getLinkHrefPathMaps(compiler, compilation, chunk, hash, 'css');
-                let cssChunkTemplate = Template.asString([`href = eval((eval(${JSON.stringify(_hrefMaps)})[chunkId])); //${PluginName} insert!\n`])
+                let originTemplateString = this.getHrefSrcPath(compiler, compilation.mainTemplate, chunk, hash, 'css/mini-extract');
+                let cssChunkTemplate = Template.asString([
+                    'var originTemplate = function (chunkId) {  ',
+                        Template.indent([
+                            Template.indent([
+                                Template.indent([
+                                    `return ${originTemplateString}`
+                                ]),
+                                '};'
+                            ])
+                        ]),
+                        Template.indent([
+                            Template.indent([`href = eval((${JSON.stringify(_hrefMaps)})[chunkId]); //${PluginName} insert!`])
+                        ]),
+                        ''
+                ])
                 source = insertStr(source, source.indexOf('var fullhref'), cssChunkTemplate);
                 return source
               });
@@ -179,7 +205,8 @@ class ChunkFilenameReplaceWebpackPlugin {
         })
         Object.keys(chunkMaps.name).forEach(i => { // 保留不需要修改的chunk路径
             if(!Object.hasOwnProperty.call(linkHrefPathMaps, i)) {
-                linkHrefPathMaps[i] = this.getHrefSrcPath(compiler, mainTemplate, chunk, hash, fileTypeMaps[fileType].moduleType);
+                linkHrefPathMaps[i] = `originTemplate(chunkId)`; // originTemplate是不需要修改的chunk路径变量，对运行时代码优化，减少冗余代码
+                this.getHrefSrcPath(compiler, mainTemplate, chunk, hash, fileTypeMaps[fileType].moduleType);
             }
         })
         return linkHrefPathMaps

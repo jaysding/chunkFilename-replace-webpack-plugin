@@ -51,7 +51,7 @@ module.exports = {
                 },
                 to: {
                     css: 'css/hahaha.css',
-                    js: 'axi.[chunkhash:4].[contenthash:4].js'
+                    js: 'js/axi.[chunkhash:4].[contenthash:4].js'
                 }
             }
         ])

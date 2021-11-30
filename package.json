@@ -1,6 +1,6 @@
 {
     "name": "chunk-filename-replace-webpack-plugin",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "jaysding",
     "description": "ChunkFilename for Webpack4, and dynamically imported chunk names (paths)",
     "main": "plugins/chunk-filename-replace-webpack-plugin.js",

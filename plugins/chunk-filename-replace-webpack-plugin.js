@@ -209,7 +209,7 @@ class ChunkFilenameReplaceWebpackPlugin {
                 }
             }
         });
-        Object.keys(Object.assign({}, chunkMaps?.hash ?? {}, chunkMaps.name)).forEach((i) => { // 保留不需要修改的chunk路径 2021/12/27：当chunk中存在chunk-xxx时，从chunkMaps.hash里取值
+        Object.keys(Object.assign({}, chunkMaps.hash || {}, chunkMaps.name)).forEach((i) => { // 保留不需要修改的chunk路径 2021/12/27：当chunk中存在chunk-xxx时，从chunkMaps.hash里取值
             if (!Object.hasOwnProperty.call(linkHrefPathMaps, i)) {
                 linkHrefPathMaps[i] = 'originTemplate(chunkId)'; // originTemplate是不需要修改的chunk路径变量，对运行时代码优化，减少冗余代码
             }
